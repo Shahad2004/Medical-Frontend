@@ -9,156 +9,139 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
 import logoImg from './img12.png';
 import { useNavigate } from 'react-router-dom';
-
-
-
-
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
 
 const pages = ['Home', 'About', 'Medicine'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function Header() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
-
   const navigate = useNavigate();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
 
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
-  };
-
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
 
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   return (
-    <AppBar position="static" color='#fff'>
-      <Container maxWidth="xl" >
-        <Toolbar disableGutters>
+    <AppBar position="fixed" sx={{ background: '#ffffff' }}>
+      <Container maxWidth="xl">
+        <Toolbar disableGutters sx={{ justifyContent: 'space-between' }}>
 
-          {/* Logo for md and above */}
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="/"
-            sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-            <img
-              src={logoImg}
-              alt="Logo"
-              style={{width:"150px", height:"100px"}}
-            />
-          </Typography>
+          {/* Mobile View */}
+          {isMobile && (
+            <>
+              {/* Left: Hamburger menu */}
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <IconButton
+                  size="large"
+                  aria-label="menu"
+                  onClick={handleOpenNavMenu}
+                  color="inherit"
+                >
+                  <MenuIcon />
+                </IconButton>
+                <Menu
+                  anchorEl={anchorElNav}
+                  anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'left',
+                  }}
+                  open={Boolean(anchorElNav)}
+                  onClose={handleCloseNavMenu}
+                >
+                  {pages.map((page) => (
+                    <MenuItem key={page} onClick={handleCloseNavMenu}>
+                      <Typography textAlign="center">{page}</Typography>
+                    </MenuItem>
+                  ))}
+                </Menu>
+              </Box>
 
-          {/* Menu icon for xs screens */}
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{ display: { xs: 'block', md: 'none' } }}
-            >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography sx={{ textAlign: 'center' }}>{page}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
+              {/* Center: Logo */}
+              <Box sx={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}>
+                <img src={logoImg} alt="Logo" style={{ height: 50 }} />
+              </Box>
 
-          {/* Logo for xs */}
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            href="/"
-            sx={{
-              mr: 2,
-              display: { xs: 'flex', md: 'none' },
-              flexGrow: 1,
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-            LOGO
-          </Typography>
+              {/* Right: Login button */}
+              <Box sx={{ marginLeft: 'auto' }}>
+                <Button
+                  onClick={() => navigate('/')}
+                  sx={{
+                    width: '100px',
+                    borderRadius: '20px',
+                    color: '#fff',
+                    backgroundColor: '#40A2E3',
+                    '&:hover': {
+                      backgroundColor: '#3595d1',
+                    },
+                  }}
+                >
+                  LOG IN
+                </Button>
+              </Box>
+            </>
+          )}
 
-          {/* Pages on the right side for md and above */}
-          <Box sx={{ flexGrow: 0, display: { xs: 'none', md: 'flex' }, marginLeft: 'auto' }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: '#4C6AAC', display: 'block', textTransform: 'capitalize' }}
-              >
-                {page}
-              </Button>
-            ))}
-          </Box>
+          {/* Desktop View */}
+          {!isMobile && (
+            <>
+              {/* Left: Logo */}
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <img
+                  src={logoImg}
+                  alt="Logo"
+                  style={{ width: '150px', height: '100px' }}
+                />
+              </Box>
 
-          {/* Avatar/User Menu */}
-          <Box sx={{ flexGrow: 0, ml: 2 , mr:10}}>
-            <Button
-             onClick={() =>  navigate('/')}
-              sx={{
-                width: '120px',              
-                borderRadius: '20px',
-                color: '#fff',
-                backgroundColor: '#40A2E3',
-                '&:hover': {
-                  backgroundColor: '#3595d1', 
-                },
-              }}
-            >
-              LOG IN
-            </Button>
-          </Box>
-
-
+              {/* Right: Pages + Login */}
+              <Box sx={{ display: 'flex', alignItems: 'center', marginLeft: 'auto' }}>
+                {pages.map((page) => (
+                  <Button
+                    key={page}
+                    onClick={handleCloseNavMenu}
+                    sx={{
+                      my: 2,
+                      color: '#4C6AAC',
+                      display: 'block',
+                      textTransform: 'capitalize',
+                    }}
+                  >
+                    {page}
+                  </Button>
+                ))}
+                <Button
+                  onClick={() => navigate('/')}
+                  sx={{
+                    ml: 2,
+                    width: '120px',
+                    borderRadius: '20px',
+                    color: '#fff',
+                    backgroundColor: '#40A2E3',
+                    '&:hover': {
+                      backgroundColor: '#3595d1',
+                    },
+                  }}
+                >
+                  LOG IN
+                </Button>
+              </Box>
+            </>
+          )}
 
         </Toolbar>
       </Container>
