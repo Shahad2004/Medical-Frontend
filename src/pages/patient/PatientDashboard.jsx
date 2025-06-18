@@ -16,6 +16,8 @@ import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import axios from 'axios';
 
+const BASE_URL = import.meta.env.VITE_SERVER_URL;
+
 const PatientDashboard = () => {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -38,7 +40,7 @@ const PatientDashboard = () => {
         console.log('Fetching appointments for patient ID:', user.id);
 
         // Fetch appointments for the logged-in patient
-        const response = await axios.get(`http://localhost:5000/api/appointments/patient/${user.id}`);
+        const response = await axios.get(`${BASE_URL}/api/appointments/patient/${user.id}`);
         console.log('Appointments response:', response.data);
         setAppointments(response.data);
         setError(null);
@@ -59,7 +61,7 @@ const PatientDashboard = () => {
       
       const user = JSON.parse(localStorage.getItem('user'));
       
-      await axios.put(`http://localhost:5000/api/appointments/${appointmentId}`, {
+      await axios.put(`${BASE_URL}/api/appointments/${appointmentId}`, {
         status: newStatus,
         patient_id: user.id
       });

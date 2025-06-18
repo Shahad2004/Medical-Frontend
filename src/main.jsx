@@ -1,3 +1,4 @@
+// IMPORTANT: Set VITE_SERVER_URL in your .env file to configure the backend base URL for API calls.
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';

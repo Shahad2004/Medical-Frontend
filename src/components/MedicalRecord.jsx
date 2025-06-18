@@ -39,6 +39,8 @@ import axios from 'axios';
 import MonitorHeartOutlinedIcon from '@mui/icons-material/MonitorHeartOutlined';
 import PatientBanner from './common/PatientBanner';
 
+const BASE_URL = import.meta.env.VITE_SERVER_URL;
+
 const MedicalRecord = () => {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -66,7 +68,7 @@ const MedicalRecord = () => {
       console.log('Current user from localStorage:', currentUser);
       console.log('Doctor ID being used:', currentUser.id);
 
-      const response = await axios.get(`http://localhost:5000/api/patients/${id}?doctorId=${currentUser.id}`);
+      const response = await axios.get(`${BASE_URL}/api/patients/${id}?doctorId=${currentUser.id}`);
       setPatientData(response.data);
       setError(null);
     } catch (err) {
@@ -111,7 +113,7 @@ const MedicalRecord = () => {
         return;
       }
 
-      await axios.delete(`http://localhost:5000/api/patients/${id}?doctorId=${currentUser.id}`);
+      await axios.delete(`${BASE_URL}/api/patients/${id}?doctorId=${currentUser.id}`);
       navigate('/patients');
     } catch (err) {
       setError('Error deleting patient: ' + err.message);
@@ -133,7 +135,7 @@ const MedicalRecord = () => {
         return;
       }
 
-      const response = await axios.put(`http://localhost:5000/api/patients/${id}?doctorId=${currentUser.id}`, patientData);
+      const response = await axios.put(`${BASE_URL}/api/patients/${id}?doctorId=${currentUser.id}`, patientData);
       setPatientData(response.data);
       setIsEditing(false);
       setSuccess(true);

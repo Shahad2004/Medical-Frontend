@@ -19,6 +19,8 @@ import { styled } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 
+const BASE_URL = import.meta.env.VITE_SERVER_URL;
+
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   "&.header": {
     backgroundColor: "#f5f5f5",
@@ -68,7 +70,7 @@ const PatientsList = () => {
         console.log('Doctor ID being used:', currentUser.id);
 
         // Use the logged-in doctor's ID
-        const response = await axios.get(`http://localhost:5000/api/patients/assigned/${currentUser.id}`);
+        const response = await axios.get(`${BASE_URL}/api/patients/assigned/${currentUser.id}`);
         console.log('API response for assigned patients:', response.data);
         setPatients(response.data);
         setLoading(false);

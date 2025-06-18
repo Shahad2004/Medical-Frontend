@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Box, Typography, TextField, Button, Checkbox, FormControlLabel, Alert } from '@mui/material';
 
+const BASE_URL = import.meta.env.VITE_SERVER_URL;
+
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -16,7 +18,7 @@ export default function Login() {
     setError(null);
     setLoading(true);
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/login', { email, password });
+      const res = await axios.post(`${BASE_URL}/api/auth/login`, { email, password });
       let user = res.data.user;
       if (res.data.token) {
         user = { ...user, token: res.data.token };
