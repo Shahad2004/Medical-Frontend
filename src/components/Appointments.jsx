@@ -95,6 +95,8 @@ const timeSlots = Array.from({ length: 10 }, (_, i) => {
   return `${hour.toString().padStart(2, '0')}:00`;
 });
 
+const BASE_URL = import.meta.env.VITE_SERVER_URL;
+
 const Appointments = () => {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -127,7 +129,7 @@ const Appointments = () => {
         setError('Doctor ID not found. Please log in again.');
         return;
       }
-      const response = await axios.get(`http://localhost:5000/api/patients/assigned/${doctorId}`);
+      const response = await axios.get(`${BASE_URL}/api/patients/assigned/${doctorId}`);
       console.log('API response for assigned patients:', response.data);
       setAssignedPatients(response.data);
     } catch (err) {
@@ -144,7 +146,7 @@ const Appointments = () => {
         setLoading(false);
         return;
       }
-      const response = await axios.get(`http://localhost:5000/api/appointments?doctorId=${doctorId}`);
+      const response = await axios.get(`${BASE_URL}/api/appointments?doctorId=${doctorId}`);
       // معالجة البيانات لتناسب العرض
       const mapped = response.data.map((apt) => {
         // استخراج اليوم من appointment_date
@@ -188,7 +190,7 @@ const Appointments = () => {
         appointment_time: form.time,
         notes: form.notes
       };
-      await axios.post('http://localhost:5000/api/appointments', payload, {
+      await axios.post(`${BASE_URL}/api/appointments`, payload, {
         headers: {
           Authorization: `Bearer ${token}`
         }

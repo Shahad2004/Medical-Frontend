@@ -31,6 +31,8 @@ import SaveIcon from '@mui/icons-material/Save';
 import axios from 'axios';
 import PatientBanner from './common/PatientBanner';
 
+const BASE_URL = import.meta.env.VITE_SERVER_URL;
+
 const PatientSchedules = () => {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -60,11 +62,11 @@ const PatientSchedules = () => {
         console.log('Doctor ID:', doctorId);
 
         // Fetch patient data
-        const patientResponse = await axios.get(`http://localhost:5000/api/patients/${id}?doctorId=${doctorId}`);
+        const patientResponse = await axios.get(`${BASE_URL}/api/patients/${id}?doctorId=${doctorId}`);
         setPatientData(patientResponse.data);
 
         // Fetch appointments
-        const appointmentsResponse = await axios.get(`http://localhost:5000/api/appointments/${id}?doctorId=${doctorId}`);
+        const appointmentsResponse = await axios.get(`${BASE_URL}/api/appointments/${id}?doctorId=${doctorId}`);
         console.log('Appointments response:', appointmentsResponse.data);
         setScheduleItems(appointmentsResponse.data);
       } catch (err) {
@@ -102,10 +104,10 @@ const PatientSchedules = () => {
       const user = JSON.parse(localStorage.getItem('user'));
       const doctorId = user?.id;
 
-      await axios.delete(`http://localhost:5000/api/appointments/${selectedItemId}?doctorId=${doctorId}&patientId=${id}`);
+      await axios.delete(`${BASE_URL}/api/appointments/${selectedItemId}?doctorId=${doctorId}&patientId=${id}`);
       
       // Refresh appointments
-      const response = await axios.get(`http://localhost:5000/api/appointments/${id}?doctorId=${doctorId}`);
+      const response = await axios.get(`${BASE_URL}/api/appointments/${id}?doctorId=${doctorId}`);
       setScheduleItems(response.data);
       
       handleCloseDeleteDialog();
@@ -127,13 +129,13 @@ const PatientSchedules = () => {
       const user = JSON.parse(localStorage.getItem('user'));
       const doctorId = user?.id;
 
-      await axios.put(`http://localhost:5000/api/appointments/${editingItem.id}?doctorId=${doctorId}`, {
+      await axios.put(`${BASE_URL}/api/appointments/${editingItem.id}?doctorId=${doctorId}`, {
         ...editingItem,
         patient_id: parseInt(id)
       });
       
       // Refresh appointments
-      const response = await axios.get(`http://localhost:5000/api/appointments/${id}?doctorId=${doctorId}`);
+      const response = await axios.get(`${BASE_URL}/api/appointments/${id}?doctorId=${doctorId}`);
       setScheduleItems(response.data);
       
       setIsEditing(false);
